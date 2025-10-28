@@ -50,7 +50,7 @@ CREATE TABLE Subjects (
     Description NVARCHAR(200)
 );
 
--- ClassSubjects Table (Mapping: কোন ক্লাসে কোন বিষয়)
+-- ClassSubjects Table 
 CREATE TABLE ClassSubjects (
     ClassID INT NOT NULL,
     SubjectID INT NOT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE ClassSubjects (
     FOREIGN KEY (SubjectID) REFERENCES Subjects(SubjectID)
 );
 
--- TeacherSubjects Table (Mapping: কোন শিক্ষক কোন বিষয় পড়ান)
+-- TeacherSubjects Table 
 CREATE TABLE TeacherSubjects (
     TeacherID INT NOT NULL,
     SubjectID INT NOT NULL,
@@ -68,12 +68,14 @@ CREATE TABLE TeacherSubjects (
     FOREIGN KEY (SubjectID) REFERENCES Subjects(SubjectID)
 );
 
+-- ExamTypes Table
 CREATE TABLE ExamTypes (
     ExamTypeID INT IDENTITY(1,1) PRIMARY KEY,
-    ExamTypeName NVARCHAR(50) NOT NULL,   -- যেমন: Mid Term, Final, Class Test
+    ExamTypeName NVARCHAR(50) NOT NULL,   
     Description NVARCHAR(200)
 );
 
+-- Exams Table
 CREATE TABLE Exams (
     ExamID INT IDENTITY(1,1) PRIMARY KEY,
     ExamTypeID INT NOT NULL,
@@ -87,6 +89,7 @@ CREATE TABLE Exams (
     FOREIGN KEY (SectionID) REFERENCES Sections(SectionID)
 );
 
+-- ExamSubjects Table
 CREATE TABLE ExamSubjects (
     ExamID INT NOT NULL,
     SubjectID INT NOT NULL,
@@ -98,6 +101,7 @@ CREATE TABLE ExamSubjects (
     FOREIGN KEY (SubjectID) REFERENCES Subjects(SubjectID)
 );
 
+-- StudentMarks Table
 CREATE TABLE StudentMarks (
     MarkID INT IDENTITY(1,1) PRIMARY KEY,
     StudentID INT NOT NULL,
@@ -109,6 +113,7 @@ CREATE TABLE StudentMarks (
     FOREIGN KEY (SubjectID) REFERENCES Subjects(SubjectID)
 );
 
+-- Grades Table
 CREATE TABLE Grades (
     GradeID INT IDENTITY(1,1) PRIMARY KEY,
     GradeName NVARCHAR(5),
@@ -117,6 +122,7 @@ CREATE TABLE Grades (
     GPA DECIMAL(3,2)
 );
 
+-- Attendance Table
 CREATE TABLE Attendance (
     AttendanceID INT IDENTITY(1,1) PRIMARY KEY,
     StudentID INT NOT NULL,
@@ -125,6 +131,7 @@ CREATE TABLE Attendance (
     FOREIGN KEY (StudentID) REFERENCES Students(StudentID)
 );
 
+-- ClassRoutine Table
 CREATE TABLE ClassRoutine (
     RoutineID INT IDENTITY(1,1) PRIMARY KEY,
     ClassID INT NOT NULL,
@@ -140,13 +147,15 @@ CREATE TABLE ClassRoutine (
     FOREIGN KEY (TeacherID) REFERENCES Teachers(TeacherID)
 );
 
+-- Fees Table
 CREATE TABLE Fees (
     FeeID INT IDENTITY(1,1) PRIMARY KEY,
-    FeeType NVARCHAR(50) NOT NULL, -- Tuition, Exam Fee, Transport ইত্যাদি
+    FeeType NVARCHAR(50) NOT NULL,
     Description NVARCHAR(200),
     Amount DECIMAL(10,2) NOT NULL
 );
 
+-- StudentFees Table
 CREATE TABLE StudentFees (
     StudentFeeID INT IDENTITY(1,1) PRIMARY KEY,
     StudentID INT NOT NULL,
@@ -158,6 +167,7 @@ CREATE TABLE StudentFees (
     FOREIGN KEY (FeeID) REFERENCES Fees(FeeID)
 );
 
+-- Staffs Table
 CREATE TABLE Staffs (
     StaffID INT IDENTITY(1,1) PRIMARY KEY,
     FullName NVARCHAR(100) NOT NULL,
@@ -170,16 +180,19 @@ CREATE TABLE Staffs (
     Email NVARCHAR(100)
 );
 
+-- Designations Table
 CREATE TABLE Designations (
     DesignationID INT IDENTITY(1,1) PRIMARY KEY,
     DesignationName NVARCHAR(50) NOT NULL
 );
 
+-- Departments Table
 CREATE TABLE Departments (
     DepartmentID INT IDENTITY(1,1) PRIMARY KEY,
     DepartmentName NVARCHAR(50) NOT NULL
 );
 
+-- Transport Table
 CREATE TABLE Transport (
     TransportID INT IDENTITY(1,1) PRIMARY KEY,
     VehicleNo NVARCHAR(20),
@@ -187,6 +200,7 @@ CREATE TABLE Transport (
     Capacity INT
 );
 
+-- Routes Table
 CREATE TABLE Routes (
     RouteID INT IDENTITY(1,1) PRIMARY KEY,
     RouteName NVARCHAR(100),
@@ -194,6 +208,7 @@ CREATE TABLE Routes (
     FOREIGN KEY (TransportID) REFERENCES Transport(TransportID)
 );
 
+-- BusStudents Table
 CREATE TABLE BusStudents (
     StudentID INT NOT NULL,
     RouteID INT NOT NULL,
@@ -202,12 +217,14 @@ CREATE TABLE BusStudents (
     FOREIGN KEY (RouteID) REFERENCES Routes(RouteID)
 );
 
+-- Hostels Table
 CREATE TABLE Hostels (
     HostelID INT IDENTITY(1,1) PRIMARY KEY,
     HostelName NVARCHAR(100),
     Location NVARCHAR(255)
 );
 
+-- HostelRooms Table
 CREATE TABLE HostelRooms (
     RoomID INT IDENTITY(1,1) PRIMARY KEY,
     HostelID INT NOT NULL,
@@ -216,6 +233,7 @@ CREATE TABLE HostelRooms (
     FOREIGN KEY (HostelID) REFERENCES Hostels(HostelID)
 );
 
+-- StudentHostel Table
 CREATE TABLE StudentHostel (
     StudentID INT NOT NULL,
     RoomID INT NOT NULL,
