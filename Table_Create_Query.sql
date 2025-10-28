@@ -258,3 +258,99 @@ CREATE TABLE Users (
     FOREIGN KEY (RoleID) REFERENCES Roles(RoleID)
 );
 
+-- Parents Table
+CREATE TABLE Parents (
+    ParentID INT IDENTITY(1,1) PRIMARY KEY,
+    ParentName NVARCHAR(100) NOT NULL,
+    Gender NVARCHAR(10),
+    Phone NVARCHAR(20),
+    Email NVARCHAR(100),
+    Address NVARCHAR(200),
+    Occupation NVARCHAR(100),
+    CreatedAt DATETIME DEFAULT GETDATE()
+);
+
+-- StudentParent Table
+CREATE TABLE StudentParent (
+    StudentParentID INT IDENTITY(1,1) PRIMARY KEY,
+    StudentID INT NOT NULL,
+    ParentID INT NOT NULL,
+    Relationship NVARCHAR(50),  
+    FOREIGN KEY (StudentID) REFERENCES Students(StudentID),
+    FOREIGN KEY (ParentID) REFERENCES Parents(ParentID)
+);
+
+-- BookCategories Table
+CREATE TABLE BookCategories (
+    CategoryID INT IDENTITY(1,1) PRIMARY KEY,
+    CategoryName NVARCHAR(100) NOT NULL,
+    Description NVARCHAR(255)
+);
+
+-- LibraryBooks Table
+CREATE TABLE LibraryBooks (
+    BookID INT IDENTITY(1,1) PRIMARY KEY,
+    Title NVARCHAR(150) NOT NULL,
+    Author NVARCHAR(100),
+    ISBN NVARCHAR(50),
+    PublishedYear INT,
+    CategoryID INT,
+    Quantity INT DEFAULT 1,
+    AvailableCopies INT DEFAULT 1,
+    FOREIGN KEY (CategoryID) REFERENCES BookCategories(CategoryID)
+);
+
+-- BookIssues Table
+CREATE TABLE BookIssues (
+    IssueID INT IDENTITY(1,1) PRIMARY KEY,
+    BookID INT NOT NULL,
+    StudentID INT NOT NULL,
+    IssueDate DATE DEFAULT GETDATE(),
+    DueDate DATE,
+    ReturnDate DATE,
+    FineAmount DECIMAL(10,2) DEFAULT 0,
+    FOREIGN KEY (BookID) REFERENCES LibraryBooks(BookID),
+    FOREIGN KEY (StudentID) REFERENCES Students(StudentID)
+);
+
+-- Periods Table
+CREATE TABLE Periods (
+    PeriodID INT IDENTITY(1,1) PRIMARY KEY,
+    PeriodName NVARCHAR(50),      
+    StartTime TIME NOT NULL,
+    EndTime TIME NOT NULL,
+    CreatedAt DATETIME DEFAULT GETDATE()
+);
+
+-- Notices Table
+CREATE TABLE Notices (
+    NoticeID INT IDENTITY(1,1) PRIMARY KEY,
+    Title NVARCHAR(150) NOT NULL,
+    Description NVARCHAR(MAX),
+    CreatedBy INT,
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    ExpiryDate DATE,
+    FOREIGN KEY (CreatedBy) REFERENCES Users(UserID)
+);
+
+-- Events Table
+CREATE TABLE Events (
+    EventID INT IDENTITY(1,1) PRIMARY KEY,
+    EventTitle NVARCHAR(150) NOT NULL,
+    EventDate DATE NOT NULL,
+    Location NVARCHAR(100),
+    Description NVARCHAR(MAX),
+    CreatedBy INT,
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (CreatedBy) REFERENCES Users(UserID)
+);
+
+-- UserRoles Table
+CREATE TABLE UserRoles (
+    UserRoleID INT IDENTITY(1,1) PRIMARY KEY,
+    UserID INT NOT NULL,
+    RoleID INT NOT NULL,
+    AssignedAt DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    FOREIGN KEY (RoleID) REFERENCES Roles(RoleID)
+);
