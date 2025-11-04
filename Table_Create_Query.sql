@@ -1,10 +1,17 @@
-﻿-- Classes Table
+IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = N'SMSDB')
+BEGIN
+    CREATE DATABASE SMSDB;
+END
+GO
+
+-- Classes Table
 CREATE TABLE Classes (
     ClassID INT IDENTITY(1,1) PRIMARY KEY,
     ClassName NVARCHAR(50) NOT NULL,
     Description NVARCHAR(200)
 );
-
+GO
+    
 -- Sections Table
 CREATE TABLE Sections (
     SectionID INT IDENTITY(1,1) PRIMARY KEY,
@@ -12,7 +19,8 @@ CREATE TABLE Sections (
     ClassID INT NOT NULL,
     FOREIGN KEY (ClassID) REFERENCES Classes(ClassID)
 );
-
+GO
+    
 -- Students Table
 CREATE TABLE Students (
     StudentID INT IDENTITY(1,1) PRIMARY KEY,
@@ -29,7 +37,8 @@ CREATE TABLE Students (
     FOREIGN KEY (ClassID) REFERENCES Classes(ClassID),
     FOREIGN KEY (SectionID) REFERENCES Sections(SectionID)
 );
-
+GO
+    
 -- Teachers Table
 CREATE TABLE Teachers (
     TeacherID INT IDENTITY(1,1) PRIMARY KEY,
@@ -42,14 +51,16 @@ CREATE TABLE Teachers (
     Phone NVARCHAR(20),
     Email NVARCHAR(100)
 );
-
+GO
+    
 -- Subjects Table
 CREATE TABLE Subjects (
     SubjectID INT IDENTITY(1,1) PRIMARY KEY,
     SubjectName NVARCHAR(50) NOT NULL,
     Description NVARCHAR(200)
 );
-
+GO
+    
 -- ClassSubjects Table 
 CREATE TABLE ClassSubjects (
     ClassID INT NOT NULL,
@@ -58,7 +69,8 @@ CREATE TABLE ClassSubjects (
     FOREIGN KEY (ClassID) REFERENCES Classes(ClassID),
     FOREIGN KEY (SubjectID) REFERENCES Subjects(SubjectID)
 );
-
+GO
+    
 -- TeacherSubjects Table 
 CREATE TABLE TeacherSubjects (
     TeacherID INT NOT NULL,
@@ -67,14 +79,16 @@ CREATE TABLE TeacherSubjects (
     FOREIGN KEY (TeacherID) REFERENCES Teachers(TeacherID),
     FOREIGN KEY (SubjectID) REFERENCES Subjects(SubjectID)
 );
-
+GO
+    
 -- ExamTypes Table
 CREATE TABLE ExamTypes (
     ExamTypeID INT IDENTITY(1,1) PRIMARY KEY,
     ExamTypeName NVARCHAR(50) NOT NULL,   
     Description NVARCHAR(200)
 );
-
+GO
+    
 -- Exams Table
 CREATE TABLE Exams (
     ExamID INT IDENTITY(1,1) PRIMARY KEY,
@@ -88,7 +102,8 @@ CREATE TABLE Exams (
     FOREIGN KEY (ClassID) REFERENCES Classes(ClassID),
     FOREIGN KEY (SectionID) REFERENCES Sections(SectionID)
 );
-
+GO
+    
 -- ExamSubjects Table
 CREATE TABLE ExamSubjects (
     ExamID INT NOT NULL,
@@ -100,7 +115,8 @@ CREATE TABLE ExamSubjects (
     FOREIGN KEY (ExamID) REFERENCES Exams(ExamID),
     FOREIGN KEY (SubjectID) REFERENCES Subjects(SubjectID)
 );
-
+GO
+    
 -- StudentMarks Table
 CREATE TABLE StudentMarks (
     MarkID INT IDENTITY(1,1) PRIMARY KEY,
@@ -112,7 +128,8 @@ CREATE TABLE StudentMarks (
     FOREIGN KEY (ExamID) REFERENCES Exams(ExamID),
     FOREIGN KEY (SubjectID) REFERENCES Subjects(SubjectID)
 );
-
+GO
+    
 -- Grades Table
 CREATE TABLE Grades (
     GradeID INT IDENTITY(1,1) PRIMARY KEY,
@@ -121,7 +138,8 @@ CREATE TABLE Grades (
     MaxMarks INT,
     GPA DECIMAL(3,2)
 );
-
+GO
+    
 -- Attendance Table
 CREATE TABLE Attendance (
     AttendanceID INT IDENTITY(1,1) PRIMARY KEY,
@@ -130,7 +148,8 @@ CREATE TABLE Attendance (
     Status NVARCHAR(10) CHECK (Status IN ('Present', 'Absent', 'Late')),
     FOREIGN KEY (StudentID) REFERENCES Students(StudentID)
 );
-
+GO
+    
 -- ClassRoutine Table
 CREATE TABLE ClassRoutine (
     RoutineID INT IDENTITY(1,1) PRIMARY KEY,
@@ -146,7 +165,8 @@ CREATE TABLE ClassRoutine (
     FOREIGN KEY (SubjectID) REFERENCES Subjects(SubjectID),
     FOREIGN KEY (TeacherID) REFERENCES Teachers(TeacherID)
 );
-
+GO
+    
 -- Fees Table
 CREATE TABLE Fees (
     FeeID INT IDENTITY(1,1) PRIMARY KEY,
@@ -154,7 +174,8 @@ CREATE TABLE Fees (
     Description NVARCHAR(200),
     Amount DECIMAL(10,2) NOT NULL
 );
-
+GO
+    
 -- StudentFees Table
 CREATE TABLE StudentFees (
     StudentFeeID INT IDENTITY(1,1) PRIMARY KEY,
@@ -166,7 +187,8 @@ CREATE TABLE StudentFees (
     FOREIGN KEY (StudentID) REFERENCES Students(StudentID),
     FOREIGN KEY (FeeID) REFERENCES Fees(FeeID)
 );
-
+GO
+    
 -- Staffs Table
 CREATE TABLE Staffs (
     StaffID INT IDENTITY(1,1) PRIMARY KEY,
@@ -179,19 +201,22 @@ CREATE TABLE Staffs (
     Phone NVARCHAR(20),
     Email NVARCHAR(100)
 );
-
+GO
+    
 -- Designations Table
 CREATE TABLE Designations (
     DesignationID INT IDENTITY(1,1) PRIMARY KEY,
     DesignationName NVARCHAR(50) NOT NULL
 );
-
+GO
+    
 -- Departments Table
 CREATE TABLE Departments (
     DepartmentID INT IDENTITY(1,1) PRIMARY KEY,
     DepartmentName NVARCHAR(50) NOT NULL
 );
-
+GO
+    
 -- Transport Table
 CREATE TABLE Transport (
     TransportID INT IDENTITY(1,1) PRIMARY KEY,
@@ -199,7 +224,8 @@ CREATE TABLE Transport (
     DriverName NVARCHAR(100),
     Capacity INT
 );
-
+GO
+    
 -- Routes Table
 CREATE TABLE Routes (
     RouteID INT IDENTITY(1,1) PRIMARY KEY,
@@ -207,7 +233,8 @@ CREATE TABLE Routes (
     TransportID INT,
     FOREIGN KEY (TransportID) REFERENCES Transport(TransportID)
 );
-
+GO
+    
 -- BusStudents Table
 CREATE TABLE BusStudents (
     StudentID INT NOT NULL,
@@ -216,14 +243,16 @@ CREATE TABLE BusStudents (
     FOREIGN KEY (StudentID) REFERENCES Students(StudentID),
     FOREIGN KEY (RouteID) REFERENCES Routes(RouteID)
 );
-
+GO
+    
 -- Hostels Table
 CREATE TABLE Hostels (
     HostelID INT IDENTITY(1,1) PRIMARY KEY,
     HostelName NVARCHAR(100),
     Location NVARCHAR(255)
 );
-
+GO
+    
 -- HostelRooms Table
 CREATE TABLE HostelRooms (
     RoomID INT IDENTITY(1,1) PRIMARY KEY,
@@ -232,7 +261,8 @@ CREATE TABLE HostelRooms (
     Capacity INT,
     FOREIGN KEY (HostelID) REFERENCES Hostels(HostelID)
 );
-
+GO
+    
 -- StudentHostel Table
 CREATE TABLE StudentHostel (
     StudentID INT NOT NULL,
@@ -241,13 +271,15 @@ CREATE TABLE StudentHostel (
     FOREIGN KEY (StudentID) REFERENCES Students(StudentID),
     FOREIGN KEY (RoomID) REFERENCES HostelRooms(RoomID)
 );
-
+GO
+    
 -- Roles Table
 CREATE TABLE Roles (
     RoleID INT IDENTITY(1,1) PRIMARY KEY,
     RoleName NVARCHAR(50) NOT NULL
 );
-
+GO
+    
 -- Users Table
 CREATE TABLE Users (
     UserID INT IDENTITY(1,1) PRIMARY KEY,
@@ -257,7 +289,8 @@ CREATE TABLE Users (
     RoleID INT,
     FOREIGN KEY (RoleID) REFERENCES Roles(RoleID)
 );
-
+GO
+    
 -- Parents Table
 CREATE TABLE Parents (
     ParentID INT IDENTITY(1,1) PRIMARY KEY,
@@ -269,7 +302,8 @@ CREATE TABLE Parents (
     Occupation NVARCHAR(100),
     CreatedAt DATETIME DEFAULT GETDATE()
 );
-
+GO
+    
 -- StudentParent Table
 CREATE TABLE StudentParent (
     StudentParentID INT IDENTITY(1,1) PRIMARY KEY,
@@ -279,14 +313,16 @@ CREATE TABLE StudentParent (
     FOREIGN KEY (StudentID) REFERENCES Students(StudentID),
     FOREIGN KEY (ParentID) REFERENCES Parents(ParentID)
 );
-
+GO
+    
 -- BookCategories Table
 CREATE TABLE BookCategories (
     CategoryID INT IDENTITY(1,1) PRIMARY KEY,
     CategoryName NVARCHAR(100) NOT NULL,
     Description NVARCHAR(255)
 );
-
+GO
+    
 -- LibraryBooks Table
 CREATE TABLE LibraryBooks (
     BookID INT IDENTITY(1,1) PRIMARY KEY,
@@ -299,7 +335,8 @@ CREATE TABLE LibraryBooks (
     AvailableCopies INT DEFAULT 1,
     FOREIGN KEY (CategoryID) REFERENCES BookCategories(CategoryID)
 );
-
+GO
+    
 -- BookIssues Table
 CREATE TABLE BookIssues (
     IssueID INT IDENTITY(1,1) PRIMARY KEY,
@@ -312,7 +349,8 @@ CREATE TABLE BookIssues (
     FOREIGN KEY (BookID) REFERENCES LibraryBooks(BookID),
     FOREIGN KEY (StudentID) REFERENCES Students(StudentID)
 );
-
+GO
+    
 -- Periods Table
 CREATE TABLE Periods (
     PeriodID INT IDENTITY(1,1) PRIMARY KEY,
@@ -321,7 +359,8 @@ CREATE TABLE Periods (
     EndTime TIME NOT NULL,
     CreatedAt DATETIME DEFAULT GETDATE()
 );
-
+GO
+    
 -- Notices Table
 CREATE TABLE Notices (
     NoticeID INT IDENTITY(1,1) PRIMARY KEY,
@@ -332,7 +371,8 @@ CREATE TABLE Notices (
     ExpiryDate DATE,
     FOREIGN KEY (CreatedBy) REFERENCES Users(UserID)
 );
-
+GO
+    
 -- Events Table
 CREATE TABLE Events (
     EventID INT IDENTITY(1,1) PRIMARY KEY,
@@ -344,7 +384,8 @@ CREATE TABLE Events (
     CreatedAt DATETIME DEFAULT GETDATE(),
     FOREIGN KEY (CreatedBy) REFERENCES Users(UserID)
 );
-
+GO
+    
 -- UserRoles Table
 CREATE TABLE UserRoles (
     UserRoleID INT IDENTITY(1,1) PRIMARY KEY,
